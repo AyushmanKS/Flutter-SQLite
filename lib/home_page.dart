@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sqlite/data/local/db_helper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,11 +10,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Map<String, dynamic>> allNotes = [];
+  DBHelper? dbRef;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    dbRef = DBHelper.getInstance;
+    getNotes();
+  }
+
+  void getNotes() async {
+    allNotes = await dbRef!.getAllNotes();
+    setState(() {});
   }
 
   @override
