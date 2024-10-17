@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -9,8 +8,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<Map<String, dynamic>> allNotes = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Flutter SQLite'),
+      ),
+      body: ListView.builder(itemCount: 2, itemBuilder: (_, index) {}),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 }
