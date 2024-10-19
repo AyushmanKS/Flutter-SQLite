@@ -20,8 +20,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getNotes() async {
+    print('-------------- Fetching Notes --------------');
     allNotes = await dbRef!.getAllNotes();
-    setState(() {});
+    print('-------------- Notes Fetched: $allNotes --------------');
+    if (allNotes.isNotEmpty) {
+      print('Notes are available for display');
+    } else {
+      print('No notes found');
+    }
+    setState(() {
+      print('-------------- UI Updated --------------');
+    });
   }
 
   @override
@@ -30,9 +39,31 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Flutter SQLite'),
       ),
-      body: ListView.builder(itemCount: 2, itemBuilder: (_, index) {}),
+      body: allNotes.isNotEmpty
+          ? ListView.builder(
+              itemCount: allNotes.length,
+              itemBuilder: (_, index) {
+                return ListTile(
+                  leading: Text('${allNotes[index][DBHelper.COLUMN_NOTE_SNO]}'),
+                  title: Text(allNotes[index][DBHelper.COLUMN_NOTE_TITLE]),
+                  subtitle: Text(allNotes[index][DBHelper.COLUMN_NOTE_DESC]),
+                );
+              })
+          : const Center(child: Text('No Notes yet!!')),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          print('-------------- Adding Note --------------');
+          bool check = await dbRef!.addNote(
+              mTitle: "Personal Fav Note",
+              mDesc: "Do you love doing your work?");
+          print('-------------- Note Added: $check --------------');
+          if (check) {
+            print('Fetching notes after adding...');
+            getNotes();
+          } else {
+            print('Failed to add note');
+          }
+        },
         child: const Icon(Icons.add),
       ),
     );
